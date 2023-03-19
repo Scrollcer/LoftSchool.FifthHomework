@@ -1,0 +1,28 @@
+Сообщения:
+<br>
+<?php $user = $this->user;
+if ($messages = $this->messages):
+    foreach ($messages as $message):
+        if ($user->isAdmin()): ?>
+            <a href="/admin/deleteMessage/?id=<?= $message->getId(); ?>">Удалить</a>
+        <?php endif; ?>
+        <span class="date"><?= $message->getCreatedDate(); ?> </span>
+        <?php if ($author = $message->getAuthor()): ?>
+        <span class="author"><?= htmlspecialchars($author->getName()); ?></span>
+    <?php else: ?>
+        <span class="author">Сообщение от удаленного пользователя</span>
+    <?php endif; ?>
+        <div class="text"><?= htmlspecialchars(nl2br($message->getText())); ?></div>
+        <?php if ($message->getImage()): ?>
+        <div><img src="/images/<?= $message->getImage(); ?>"></div>
+    <?php endif; ?>
+    <?php endforeach; ?>
+<?php else: ?>
+    Нет изображений
+<?php endif; ?>
+
+<form enctype="multipart/form-data" action="/blog/addMessage" method="post">
+    <textarea type="text" value="" name="text"></textarea><br><br>
+    Добавить изображение: <input type="file" name="image"><br>
+    <input type="submit" value="Отправить">
+</form>
