@@ -9,11 +9,11 @@ class Api extends AbstractController
 {
     public function getUserMessages()
     {
-        $userId = (int)$_GET['user_id'] ?? 0;
+        $userId = (int)$_SESSION['user_id'] ?? 0;
         if (!$userId) {
             return $this->response(['error' => 'no_user_id']);
         }
-        $messages = Message::getUserMessages($userId, 20);
+        $messages = Message::getUserMessages($userId, 10);
         if (!$messages) {
             return $this->response(['error' => 'no_messages']);
         }

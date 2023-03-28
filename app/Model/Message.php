@@ -80,7 +80,7 @@ class Message
     {
         $db = Db::getInstance();
         $data = $db->fetchAll(
-            "SELECT * FROM posts WHERE author_id = $userId LIMIT $limit",
+            "SELECT * FROM posts WHERE author_id = $userId ORDER BY created_date DESC LIMIT $limit",
             __METHOD__
         );
         if (!$data) {
@@ -140,7 +140,7 @@ class Message
     {
         return sha1(microtime(1) . mt_rand(1, 100000000)) . '.jpg';
     }
-    
+
     public function getImage()
     {
         return $this->image;
