@@ -13,7 +13,7 @@ class Api extends AbstractController
         if (!$userId) {
             return $this->response(['error' => 'no_user_id']);
         }
-        $messages = Message::getUserMessages($userId, 10);
+        $messages = Message::getUserMessages($userId, 20);
         if (!$messages) {
             return $this->response(['error' => 'no_messages']);
         }
