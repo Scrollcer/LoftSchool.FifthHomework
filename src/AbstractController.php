@@ -49,5 +49,9 @@ class AbstractController
     {
         throw new RedirectException($url);
     }
-    
+
+    public function preDispatch()
+    {
+
+    }
 }

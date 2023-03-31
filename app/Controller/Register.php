@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\User;
 use Base\AbstractController;
+use Illuminate\Database\Eloquent\Model;
 
 class Register extends AbstractController
 {
@@ -65,12 +66,15 @@ class Register extends AbstractController
 
         $userData = [
             'name' => $name,
-            'created_at' => date('Y-m-d H:i:s'),
+            'created_date' => date('Y-m-d H:i:s'),
             'password' => $password,
             'email' => $email,
         ];
+
+
         $user = new User($userData);
-        $user->save();
+        $user->saveUser();
+
 
         $this->session->authUser($user->getId());
         $this->redirect('/blog');

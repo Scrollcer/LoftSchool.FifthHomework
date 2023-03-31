@@ -2,6 +2,8 @@
 
 namespace Base;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Session
 {
     public function init()
