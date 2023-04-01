@@ -28,15 +28,11 @@ class Register extends AbstractController
         $password = $_POST['password'];
 
         $user = User::getByEmail($email);
-        var_dump($user);
         if (!$user) {
             return 'Неверный логин';
         }
 
-        if ($user->getPassword() !== User::getPasswordHash($password)) {
-            var_dump($user->getPassword());
-            var_dump(User::getPasswordHash($password));
-            die;
+        if (User::getPasswordHash($user->getPassword()) !== User::getPasswordHash($password)) {
             return 'Неверный пароль';
         }
 

@@ -15,6 +15,11 @@ class View
         $this->templatePath = $path;
     }
 
+    public function assign($data)
+    {
+
+    }
+
     public function render(string $tpl, $data = []): string
     {
         foreach ($data as $key => $value) {

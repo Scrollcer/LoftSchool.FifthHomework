@@ -52,6 +52,8 @@ class AbstractController
 
     public function preDispatch()
     {
-
+        if ($this->getUser()) {
+            $this->view->assign(['user' => $this->getUser()]);
+        }
     }
 }

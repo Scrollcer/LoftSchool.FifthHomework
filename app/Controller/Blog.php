@@ -44,8 +44,8 @@ class Blog extends AbstractController
         }
 
         $message->text = $text;
-        $message->authorId = $this->getUserId();
-        $message->createdDate = date('Y-m-d H:i:s');
+        $message->author_id = $this->getUserId();
+        $message->created_date = date('Y-m-d H:i:s');
         $message->saveMessage();
 
         $this->redirect('/blog');

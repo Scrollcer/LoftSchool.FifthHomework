@@ -9,25 +9,11 @@ class User extends Model
 {
     protected $table = 'users';
     public $timestamps = false;
-    public $id;
-    public $name;
-    public $created_date;
-    public $password;
-    public $email;
 
 
     public static function getByEmail(string $email)
     {
-        $data = self::query()->where('email', '=', $email);
-        var_dump($data);
-        die;
-        if (!$data) {
-            return null;
-        }
-
-        $user = new self($data);
-        $user->id = $data['id'];
-        return $user;
+        return self::query()->where('email', '=', $email)->first();
     }
 
     public static function getByIds(array $userIds)
@@ -45,6 +31,11 @@ class User extends Model
     public static function getById(int $id): ?self
     {
         return self:: query()->find($id)->first();
+    }
+
+    public static function getList(int $limit = 10, int $offset = 0)
+    {
+        return self::query()->limit($limit)->offset($offset)->orderBy('id', 'DESC')->get();
     }
 
     public static function getPasswordHash(string $password)

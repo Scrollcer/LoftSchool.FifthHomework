@@ -9,12 +9,6 @@ class Message extends Model
     protected $table = 'posts';
     protected $guarded = [];
     public $timestamps = false;
-    public $id;
-    public $text;
-    public $createdDate;
-    public $authorId;
-    public $author;
-    public $image;
 
     public static function deleteMessage(int $messageId)
     {
@@ -55,12 +49,12 @@ class Message extends Model
 
     public function getCreatedDate()
     {
-        return $this->createdDate;
+        return $this->created_date;
     }
 
     public function getAuthorId()
     {
-        return $this->authorId;
+        return $this->author_id;
     }
 
     public function getAuthor(): User
@@ -68,10 +62,10 @@ class Message extends Model
         return $this->author;
     }
 
-//    public function setAuthor(User $author): void
-//    {
-//        $this->author = $author;
-//    }
+    public function setAuthor(User $author): void
+    {
+        $this->author = $author;
+    }
 
     public function loadFile(string $file)
     {
@@ -95,9 +89,9 @@ class Message extends Model
     {
         return [
             'id' => $this->id,
-            'author_id' => $this->authorId,
+            'author_id' => $this->author_id,
             'text' => $this->text,
-            'created_date' => $this->createdDate,
+            'created_date' => $this->created_date,
             'image' => $this->image
         ];
     }
