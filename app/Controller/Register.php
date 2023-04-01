@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Model\User;
 use Base\AbstractController;
-use Illuminate\Database\Eloquent\Model;
+use Base\RedirectException;
 
 class Register extends AbstractController
 {
@@ -24,16 +24,20 @@ class Register extends AbstractController
 
     public function auth()
     {
-        $email = (string)$_POST['email'];
-        $password = (string)$_POST['password'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
         $user = User::getByEmail($email);
+        var_dump($user);
         if (!$user) {
-            return 'Неверный логин и пароль';
+            return 'Неверный логин';
         }
 
         if ($user->getPassword() !== User::getPasswordHash($password)) {
-            return 'Неверный логин и пароль';
+            var_dump($user->getPassword());
+            var_dump(User::getPasswordHash($password));
+            die;
+            return 'Неверный пароль';
         }
 
         $this->session->authUser($user->getId());
@@ -64,19 +68,22 @@ class Register extends AbstractController
             return 'Пароль слишком короткий';
         }
 
-        $userData = [
-            'name' => $name,
-            'created_date' => date('Y-m-d H:i:s'),
-            'password' => $password,
-            'email' => $email,
-        ];
 
-
-        $user = new User($userData);
+        $user = new User();
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = $password;
+        $user->created_date = date('Y-m-d H:i:s');
         $user->saveUser();
 
 
         $this->session->authUser($user->getId());
         $this->redirect('/blog');
+    }
+
+    public function logout()
+    {
+        $this->session->dropSession();
+        $this->redirect('/');
     }
 }

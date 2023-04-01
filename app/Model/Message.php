@@ -2,99 +2,44 @@
 
 namespace App\Model;
 
-use Base\Db;
+use Illuminate\Database\Eloquent\Model;
 
-class Message
+class Message extends Model
 {
-    private $id;
-    private $text;
-    private $createdDate;
-    private $authorId;
-    private $author;
-    private $image;
-
-    public function __construct(array $data)
-    {
-        $this->text = $data['text'];
-        $this->createdDate = $data['created_date'];
-        $this->authorId = $data['author_id'];
-        $this->image = $data['image'] ?? '';
-    }
+    protected $table = 'posts';
+    protected $guarded = [];
+    public $timestamps = false;
+    public $id;
+    public $text;
+    public $createdDate;
+    public $authorId;
+    public $author;
+    public $image;
 
     public static function deleteMessage(int $messageId)
     {
-        $db = Db::getInstance();
-        $query = "DELETE FROM posts WHERE id = $messageId";
-        return $db->exec($query, __METHOD__);
+        return self::destroy($messageId);
     }
 
-    public function save()
+    public function saveMessage()
     {
-        $db = Db::getInstance();
-        $res = $db->exec(
-            'INSERT INTO posts (
-                    text, 
-                    created_date,
-                    author_id,
-                    image
-                    ) VALUES (
-                    :text, 
-                    :created_date,
-                    :author_id,
-                    :image
-                )',
-            __FILE__,
-            [
-                ':text' => $this->text,
-                ':created_date' => $this->createdDate,
-                ':author_id' => $this->authorId,
-                ':image' => $this->image,
-            ]
-        );
-
-        return $res;
+        $this->save();
+        $this->id = $this["id"];
     }
 
-    public static function getList(int $limit = 10, int $offset = 0): array
+    public function author()
     {
-        $db = Db::getInstance();
-        $data = $db->fetchAll(
-            "SELECT * fROM posts LIMIT $limit OFFSET $offset",
-            __METHOD__
-        );
-        if (!$data) {
-            return [];
-        }
+        return $this->belongsTo(User::class);
+    }
 
-        $messages = [];
-        foreach ($data as $elem) {
-            $message = new self($elem);
-            $message->id = $elem['id'];
-            $messages[] = $message;
-        }
-
-        return $messages;
+    public static function getList(int $limit = 10, int $offset = 0)
+    {
+        return self::with('author')->limit($limit)->offset($offset)->orderBy('id', 'DESC')->get();
     }
 
     public static function getUserMessages(int $userId, int $limit): array
     {
-        $db = Db::getInstance();
-        $data = $db->fetchAll(
-            "SELECT * FROM posts WHERE author_id = $userId ORDER BY created_date DESC LIMIT $limit",
-            __METHOD__
-        );
-        if (!$data) {
-            return [];
-        }
-
-        $messages = [];
-        foreach ($data as $elem) {
-            $message = new self($elem);
-            $message->id = $elem['id'];
-            $messages[] = $message;
-        }
-
-        return $messages;
+        return self::query()->where('author_id', '=', $userId)->limit($limit)->get();
     }
 
     public function getId()
@@ -103,7 +48,7 @@ class Message
     }
 
 
-    public function getText(): string
+    public function getText()
     {
         return $this->text;
     }
@@ -123,10 +68,10 @@ class Message
         return $this->author;
     }
 
-    public function setAuthor(User $author): void
-    {
-        $this->author = $author;
-    }
+//    public function setAuthor(User $author): void
+//    {
+//        $this->author = $author;
+//    }
 
     public function loadFile(string $file)
     {

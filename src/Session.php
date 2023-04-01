@@ -20,4 +20,9 @@ class Session
     {
         return $_SESSION['user_id'] ?? false;
     }
+
+    public function dropSession()
+    {
+        session_destroy();
+    }
 }

@@ -1,3 +1,10 @@
+<?php
+$user = $this->user;
+?>
+
+Вы вошли как <?= $user->getName(); ?>#<?= $user->getId(); ?> <a href="register/logout">выйти</a>
+<br><br>
+
 Сообщения:
 <br>
 <?php $user = $this->user;
@@ -6,13 +13,13 @@ if ($messages = $this->messages):
         if ($user->isAdmin()): ?>
             <a href="/admin/deleteMessage/?id=<?= $message->getId(); ?>">Удалить</a>
         <?php endif; ?>
-        <span class="date"><?= $message->getCreatedDate(); ?> </span>
+        <span><?= $message->getCreatedDate(); ?></span>
         <?php if ($author = $message->getAuthor()): ?>
-        <span class="author"><?= htmlspecialchars($author->getName()); ?></span>
+        <span><?= htmlspecialchars($author->getName()); ?></span>
     <?php else: ?>
-        <span class="author">Сообщение от удаленного пользователя</span>
+        <span>Сообщение от удаленного пользователя</span>
     <?php endif; ?>
-        <div class="text"><?= htmlspecialchars(nl2br($message->getText())); ?></div>
+        <div><?= htmlspecialchars(nl2br($message->getText())); ?></div>
         <?php if ($message->getImage()): ?>
         <div><img src="/images/<?= $message->getImage(); ?>"></div>
     <?php endif; ?>
