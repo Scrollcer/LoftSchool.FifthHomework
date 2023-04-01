@@ -51,11 +51,14 @@ class Admin extends AbstractController
         $user->password = $password;
         $user->created_date = date('Y-m-d H:i:s');
         $user->saveUser();
-        
+
     }
 
     public function index()
     {
+        if (!$this->getUser() || !$this->getUser()->isAdmin()) {
+            $this->redirect('/');
+        }
         return $this->view->render('admin.phtml', ['users' => User::getList()]);
     }
 
